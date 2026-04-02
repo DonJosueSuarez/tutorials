@@ -3,6 +3,7 @@
   <component name="NewModuleRootManager">
     <content url="file://$USER_HOME$/odoo/odoo19">
       <sourceFolder url="file://$USER_HOME$/odoo/odoo19" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/odoo/odoo19/venv/lib64/python3.12/site-packages" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="jdk" jdkName="Python 3.12" jdkType="Python SDK" />
