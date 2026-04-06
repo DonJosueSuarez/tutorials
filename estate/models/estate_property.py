@@ -3,7 +3,7 @@ from dateutil.relativedelta import relativedelta
 from odoo import models, fields
 
 
-class StateProperty(models.Model):
+class EstateProperty(models.Model):
     _name = "estate.property" #nombre de la tabla
     _description = "Property" #descripción del modelo
 
@@ -22,3 +22,5 @@ class StateProperty(models.Model):
     garden_orientation = fields.Selection(string="Garden Orientation", selection=[('north', 'North'), ('south', 'South'), ('east', 'East'), ('west', 'West')])
     active = fields.Boolean(default=False)
     state = fields.Selection(string="State", selection=[('new', 'New'),('offer_received', 'Offer Received'), ('offer_accepted', 'Offer Accepted'), ('sold', 'Sold'), ('cancelled', 'Cancelled')], default='new')
+
+    property_type_id = fields.Many2one(comodel_name='estate.property.type', string="Property Type")
