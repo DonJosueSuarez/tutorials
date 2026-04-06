@@ -5,7 +5,9 @@
       <sourceFolder url="file://$USER_HOME$/odoo/odoo19" isTestSource="false" />
       <sourceFolder url="file://$USER_HOME$/odoo/odoo19/venv/lib64/python3.12/site-packages" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
+    </content>
     <orderEntry type="jdk" jdkName="Python 3.12" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

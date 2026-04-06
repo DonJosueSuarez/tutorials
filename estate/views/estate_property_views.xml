@@ -9,6 +9,7 @@
                     <h1>
                         <field name="name"/>
                     </h1>
+                    <field name="tag_ids" widget="many2many_tags"/>
                     <group>
                         <group>
                             <field name="property_type_id"/>
@@ -40,6 +41,15 @@
                                 <field name="buyer_id"/>
                             </group>
                         </page>
+                        <page string="Offers">
+                            <field name="offer_ids">
+                                <list string="Offers">
+                                    <field name="price"/>
+                                    <field name="partner_id"/>
+                                    <field name="status"/>
+                                </list>
+                            </field>
+                        </page>
                     </notebook>
                 </sheet>
             </form>
@@ -58,6 +68,7 @@
                 <field name="selling_price"/>
                 <field name="date_availability"/>
                 <field name="property_type_id"/>
+                <field name="tag_ids" widget="many2many_tags"/>
             </list>
         </field>
     </record>
@@ -105,6 +116,25 @@
     <record id="estate_property_type_action" model="ir.actions.act_window">
         <field name="name">Estate Property Type</field>
         <field name="res_model">estate.property.type</field>
+        <field name="view_mode">form</field>
+    </record>
+
+    <record id="tag_form" model="ir.ui.view">
+        <field name="name">tag.form</field>
+        <field name="model">tag</field>
+        <field name="arch" type="xml">
+            <form string="Tag">
+                <sheet>
+                    <span>Nombre</span>
+                    <field name="name"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="tag_action" model="ir.actions.act_window">
+        <field name="name">Tag</field>
+        <field name="res_model">tag</field>
         <field name="view_mode">form</field>
     </record>
 </odoo>
