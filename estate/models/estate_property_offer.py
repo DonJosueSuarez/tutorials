@@ -45,3 +45,13 @@ class EstatePropertyOffer(models.Model):
                 raise UserError("An accepted offer cannot be refused directly.")
             offer.status = 'refused'
         return True
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        offers = super().create(vals_list)
+        for offer in offers:
+            if offer.property_id.state in ('sold', 'cancelled'):
+                raise UserError("You cannot create an offer for a sold or cancelled property.")
+            if offer.property_id.state == 'new':
+                offer.property_id.state = 'offer_received'
+        return offers
