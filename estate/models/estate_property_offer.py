@@ -50,10 +50,15 @@ class EstatePropertyOffer(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        offers = super().create(vals_list)
-        for offer in offers:
-            if offer.property_id.state in ('sold', 'cancelled'):
+        for vals in vals_list:
+            property_id = self.env['estate.property'].browse(vals.get('property_id'))
+            if property_id.state in ('sold', 'cancelled'):
                 raise UserError("You cannot create an offer for a sold or cancelled property.")
+
+        offers = super().create(vals_list)
+
+        for offer in offers:
             if offer.property_id.state == 'new':
                 offer.property_id.state = 'offer_received'
+
         return offers
