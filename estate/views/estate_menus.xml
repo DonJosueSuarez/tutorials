@@ -20,9 +20,9 @@
               parent="estate_type_first_level_menu"
               action="estate_property_type_action"/>
 
-    <menuitem id="tag_menu_action"
+    <menuitem id="estate_property_tag_menu_action"
               name="Property Tags"
               parent="estate_type_first_level_menu"
-              action="tag_action"/>
+              action="estate_property_tag_action"/>
 
 </odoo>

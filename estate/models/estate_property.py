@@ -30,7 +30,7 @@ class EstateProperty(models.Model):
     property_type_id = fields.Many2one(comodel_name='estate.property.type', string="Property Type")
     buyer_id = fields.Many2one(comodel_name='res.partner', string="Buyer")
     salesperson_id = fields.Many2one(comodel_name='res.users', string="Salesperson", default=lambda self: self.env.user)
-    tag_ids = fields.Many2many(comodel_name='tag', string="Tags")
+    tag_ids = fields.Many2many(comodel_name='estate.property.tag', string="Tags")
     offer_ids = fields.One2many(comodel_name='estate.property.offer', inverse_name='property_id', string="Offers")
 
     total_area = fields.Float(string="Total Area", compute='_compute_total_area')
