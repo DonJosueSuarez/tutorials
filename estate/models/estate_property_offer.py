@@ -12,7 +12,7 @@ class EstatePropertyOffer(models.Model):
     price = fields.Float(string="Price")
     status = fields.Selection(string="Status", selection=[('accepted', 'Accepted'), ('refused', 'Refused')])
     partner_id = fields.Many2one('res.partner', string="Partner", required=True)
-    property_id = fields.Many2one('estate.property', string="Property", required=True)
+    property_id = fields.Many2one('estate.property', string="Property", required=True, ondelete='cascade')
     property_type_id = fields.Many2one('estate.property.type', related='property_id.property_type_id', store=True)
 
     validity = fields.Integer(default=7)
@@ -51,10 +51,15 @@ class EstatePropertyOffer(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
-            property_id = self.env['estate.property'].browse(vals.get('property_id'))
-            if property_id.state in ('sold', 'cancelled'):
+            property_rec = self.env['estate.property'].browse(vals.get('property_id'))
+            price = vals.get('price', 0.0)
+
+            if property_rec.state in ('sold', 'cancelled'):
                 raise UserError("You cannot create an offer for a sold or cancelled property.")
 
+            existing_prices = property_rec.offer_ids.mapped('price')
+            if existing_prices and price <= max(existing_prices):
+                raise UserError("Su oferta no puede ser menor a ofertas ya realizadas.")
         offers = super().create(vals_list)
 
         for offer in offers:

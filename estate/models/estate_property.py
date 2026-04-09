@@ -88,3 +88,8 @@ class EstateProperty(models.Model):
         self.buyer_id = offer.partner_id
         self.selling_price = offer.price
         self.state = 'offer_accepted'
+
+    @api.ondelete(at_uninstall=False)
+    def _unlink_except_new_or_cancelled(self):
+        if any(property.state not in('new', 'cancelled') for property in self):
+            raise UserError("No puede eliminar una propiedad nueva o cancelada")
