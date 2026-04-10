@@ -11,6 +11,7 @@ class EstateProperty(models.Model):
     _description = "Property" #descripción del modelo
     _order = "id desc"
 
+    #Campos del modelo
     name = fields.Char(required=True)
     description = fields.Text()
     postcode = fields.Char()
@@ -27,19 +28,22 @@ class EstateProperty(models.Model):
     active = fields.Boolean(default=False)
     state = fields.Selection(string="State", readonly=True, selection=[('new', 'New'),('offer_received', 'Offer Received'), ('offer_accepted', 'Offer Accepted'), ('sold', 'Sold'), ('cancelled', 'Cancelled')], default='new')
 
+    #Relaciones con otros modelos
     property_type_id = fields.Many2one(comodel_name='estate.property.type', string="Property Type")
     buyer_id = fields.Many2one(comodel_name='res.partner', string="Buyer")
     salesperson_id = fields.Many2one(comodel_name='res.users', string="Salesperson", default=lambda self: self.env.user)
     tag_ids = fields.Many2many(comodel_name='estate.property.tag', string="Tags")
     offer_ids = fields.One2many(comodel_name='estate.property.offer', inverse_name='property_id', string="Offers")
 
+    #Campos calculados
     total_area = fields.Float(string="Total Area", compute='_compute_total_area')
-
     best_price = fields.Float(compute='_compute_best_price')
 
+    #Validaciones
     _check_expected_price = models.Constraint('CHECK(expected_price > 0)', 'El Expected Price debe ser un valor mayor a cero')
     _check_selling_price = models.Constraint('CHECK(selling_price > 0)', 'El valor de venta debe ser mayor a cero')
 
+    #Validación automática
     @api.constrains('selling_price', 'expected_price')
     def _check_selling_price_percentage(self):
         for property in self:
@@ -49,6 +53,7 @@ class EstateProperty(models.Model):
             if float_compare(property.selling_price, minimum_price, precision_rounding=0.01) < 0:
                 raise ValidationError("El valor de venta debe ser mayor o igual al 90% del valor esperado")
 
+    #Campos Calculados
     @api.depends('living_area', 'garden_area')
     def _compute_total_area(self):
         for property in self:
@@ -69,6 +74,7 @@ class EstateProperty(models.Model):
             self.garden_area = 0
             self.garden_orientation = False
 
+    #Funciones para los botones
     def action_cancel(self):
         for record in self:
             if record.state == 'sold':
@@ -83,12 +89,14 @@ class EstateProperty(models.Model):
             record.state = 'sold'
             return True
 
+    #Otras funciones
     def _apply_accepted_offer(self, offer):
         self.ensure_one()
         self.buyer_id = offer.partner_id
         self.selling_price = offer.price
         self.state = 'offer_accepted'
 
+    #Sobrescritura de funciones
     @api.ondelete(at_uninstall=False)
     def _unlink_except_new_or_cancelled(self):
         if any(property.state not in('new', 'cancelled') for property in self):

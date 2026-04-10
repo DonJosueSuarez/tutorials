@@ -14,9 +14,9 @@ class EstatePropertyType(models.Model):
 
     offer_count = fields.Integer(compute='_compute_offer_count')
 
+    _check_unique_type = models.Constraint('UNIQUE(name)', 'El tipo debe ser único')
+
     @api.depends('offer_ids')
     def _compute_offer_count(self):
         for property_type in self:
             property_type.offer_count = len(property_type.offer_ids)
-
-    _check_unique_type = models.Constraint('UNIQUE(name)', 'El tipo debe ser único')
